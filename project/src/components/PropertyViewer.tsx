@@ -1,20 +1,25 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Box } from '@react-three/drei';
+"use client";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
+import { Suspense } from "react";
 
-export const PropertyViewer = () => {
+function HouseModel() {
+  // Load 3D model (replace with actual model path)
+  const { scene } = useGLTF("/house_model.glb");
+  return <primitive object={scene} scale={1} />;
+}
+
+export default function PropertyViewer() {
   return (
-    <div className="h-[400px] w-full bg-gray-100 rounded-lg overflow-hidden">
-      <Canvas camera={{ position: [5, 5, 5] }}>
+    <div className="h-screen w-full bg-gray-900 flex items-center justify-center">
+      <Canvas camera={{ position: [5, 2, 5], fov: 50 }}>
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
         <Suspense fallback={null}>
-          <Box args={[3, 2, 1]}>
-            <meshStandardMaterial color="#88c" />
-          </Box>
-          <OrbitControls />
+          <HouseModel />
         </Suspense>
+        <OrbitControls enableZoom={true} />
       </Canvas>
     </div>
   );
-};
+}
